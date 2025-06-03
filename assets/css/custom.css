@@ -1,0 +1,554 @@
+/* Custom styles for Shree Laptop Solutions */
+
+/* Base styles */
+:root {
+  --transition-duration: 0.3s;
+  --transition-timing: ease;
+  --body-bg-light: #ffffff;
+  --body-text-light: #1f2937;
+  --header-bg-light: #1f2937;
+  --header-text-light: #ffffff;
+  --footer-bg-light: #111827;
+  --footer-text-light: #9ca3af;
+  --nav-link-light: #d1d5db;
+  --nav-link-hover-light: #ffffff;
+  --theme-toggle-bg-light: #374151;
+  --theme-toggle-color-light: #d1d5db;
+  --theme-toggle-hover-bg-light: #4b5563;
+  --theme-toggle-hover-color-light: #ffffff;
+  --sun-icon-color-light: #fcd34d; /* yellow-400 */
+  --moon-icon-color-light: #d1d5db; /* gray-300 */
+  --card-bg-light: #ffffff;
+  --text-gray-600-light: #4b5563;
+  --text-blue-700-light: #2563eb;
+  --whatsapp-button-bg-light: #10b981;
+  --whatsapp-button-hover-bg-light: #059669;
+  --contact-text-gray-700-light: #374151;
+  --contact-link-light: #2563eb;
+  --contact-whatsapp-link-light: #10b981;
+  --contact-instagram-link-light: #8b5cf6;
+  --form-label-light: #4b5563;
+  --form-border-light: #e5e7eb;
+  --form-focus-border-light: #3b82f6;
+  --form-focus-shadow-light: rgba(59, 130, 246, 0.2);
+  --submit-button-bg-light: #374151;
+  --submit-button-hover-bg-light: #4b5563;
+  --form-note-light: #6b7280;
+}
+
+.dark {
+  --body-bg-dark: #111827;
+  --body-text-dark: #ffffff;
+  --header-bg-dark: #111827;
+  --header-text-dark: #ffffff;
+  --footer-bg-dark: #0f172a;
+  --footer-text-dark: #9ca3af;
+  --nav-link-dark: #d1d5db;
+  --nav-link-hover-dark: #ffffff;
+  --theme-toggle-bg-dark: #374151;
+  --theme-toggle-color-dark: #d1d5db;
+  --theme-toggle-hover-bg-dark: #4b5563;
+  --theme-toggle-hover-color-dark: #ffffff;
+  --sun-icon-color-dark: #fcd34d; /* yellow-400 */
+  --moon-icon-color-dark: #d1d5db; /* gray-300 */
+  --card-bg-dark: #1f2937;
+  --text-gray-600-dark: #9ca3af;
+  --text-blue-700-dark: #60a5fa;
+  --whatsapp-button-bg-dark: #10b981;
+  --whatsapp-button-hover-bg-dark: #059669;
+  --contact-text-gray-700-dark: #d1d5db;
+  --contact-link-dark: #60a5fa;
+  --contact-whatsapp-link-dark: #34d399;
+  --contact-instagram-link-dark: #a78bfa;
+  --form-label-dark: #9ca3af;
+  --form-border-dark: #4b5563;
+  --form-focus-border-dark: #60a5fa;
+  --form-focus-shadow-dark: rgba(96, 165, 250, 0.2);
+  --submit-button-bg-dark: #374151;
+  --submit-button-hover-bg-dark: #4b5563;
+  --form-note-dark: #6b7280;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-color: var(--body-bg-light);
+  color: var(--body-text-light);
+  transition: background-color var(--transition-duration) var(--transition-timing), color var(--transition-duration) var(--transition-timing);
+}
+
+.dark body {
+    background-color: var(--body-bg-dark);
+    color: var(--body-text-dark);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Header */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 50;
+  padding: 1rem 0;
+  background-color: var(--header-bg-light);
+  color: var(--header-text-light);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color var(--transition-duration) var(--transition-timing), color var(--transition-duration) var(--transition-timing);
+}
+
+.dark .main-header {
+  background-color: var(--header-bg-dark);
+  color: var(--header-text-dark);
+}
+
+.header-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@media (min-width: 768px) {
+  .header-content {
+    flex-direction: row;
+  }
+}
+
+/* Navigation */
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+@media (min-width: 768px) {
+  .main-nav {
+    margin-top: 0;
+  }
+}
+
+.nav-link {
+  color: var(--nav-link-light);
+  transition: color var(--transition-duration) var(--transition-timing);
+}
+
+.nav-link:hover {
+  color: var(--nav-link-hover-light);
+}
+
+.dark .nav-link {
+    color: var(--nav-link-dark);
+}
+
+.dark .nav-link:hover {
+    color: var(--nav-link-hover-dark);
+}
+
+/* Theme Toggle */
+.theme-toggle {
+  background-color: var(--theme-toggle-bg-light);
+  color: var(--theme-toggle-color-light);
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  transition: all var(--transition-duration) var(--transition-timing);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+}
+
+.theme-toggle:hover {
+  background-color: var(--theme-toggle-hover-bg-light);
+  color: var(--theme-toggle-hover-color-light);
+}
+
+.theme-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.sun-icon {
+    color: var(--sun-icon-color-light);
+}
+
+.moon-icon {
+    color: var(--moon-icon-color-light);
+}
+
+/* Search Bar */
+.search-bar {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--form-border-light);
+  border-radius: 0.25rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: all var(--transition-duration) var(--transition-timing);
+  background-color: var(--body-bg-light);
+  color: var(--body-text-light);
+}
+
+.search-bar:focus {
+  outline: none;
+  border-color: var(--form-focus-border-light);
+  box-shadow: 0 0 0 2px var(--form-focus-shadow-light);
+}
+
+.dark .search-bar {
+  background-color: var(--card-bg-dark);
+  color: var(--body-text-dark);
+  border-color: var(--form-border-dark);
+}
+
+@media (min-width: 768px) {
+  .search-bar {
+    width: 50%;
+  }
+}
+
+/* Laptop Grid */
+.laptop-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(1, 1fr);
+  padding: 2rem 0;
+  margin-bottom: 6rem;
+}
+
+@media (min-width: 640px) {
+  .laptop-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .laptop-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Laptop Card */
+.laptop-card {
+  background-color: var(--card-bg-light);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(0);
+  transition: transform var(--transition-duration) var(--transition-timing), background-color var(--transition-duration) var(--transition-timing);
+}
+
+.dark .laptop-card {
+  background-color: var(--card-bg-dark);
+}
+
+.laptop-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.1), 0 8px 8px -4px rgba(0, 0, 0, 0.03);
+}
+
+.laptop-image {
+  height: 10rem;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.laptop-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: inherit; /* Inherit color from parent (.laptop-card or body) */
+}
+
+.laptop-specs {
+  font-size: 0.875rem;
+  color: var(--text-gray-600-light);
+  margin-bottom: 0.5rem;
+  transition: color var(--transition-duration) var(--transition-timing);
+}
+
+.dark .laptop-specs {
+  color: var(--text-gray-600-dark);
+}
+
+.laptop-price {
+  color: var(--text-blue-700-light);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  transition: color var(--transition-duration) var(--transition-timing);
+}
+
+.dark .laptop-price {
+  color: var(--text-blue-700-dark);
+}
+
+.whatsapp-button {
+  margin-top: auto;
+  background-color: var(--whatsapp-button-bg-light);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition-duration) var(--transition-timing);
+}
+
+.whatsapp-button:hover {
+  background-color: var(--whatsapp-button-hover-bg-light);
+}
+
+.dark .whatsapp-button {
+    background-color: var(--whatsapp-button-bg-dark);
+}
+
+.dark .whatsapp-button:hover {
+    background-color: var(--whatsapp-button-hover-bg-dark);
+}
+
+/* Footer */
+.main-footer {
+  background-color: var(--footer-bg-light);
+  color: var(--footer-text-light);
+  padding: 1rem 0;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 50;
+  transition: background-color var(--transition-duration) var(--transition-timing), color var(--transition-duration) var(--transition-timing);
+}
+
+.dark .main-footer {
+  background-color: var(--footer-bg-dark);
+  color: var(--footer-text-dark);
+}
+
+/* Dark Mode */
+.dark {
+  /* Variables defined above */
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.laptop-card {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Background Animation */
+.background-animation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.background-animation::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(156, 163, 175, 0.2) 0%, rgba(209, 213, 219, 0.1) 50%, rgba(243, 244, 246, 0) 100%);
+  animation: moveBackground 20s linear infinite;
+}
+
+.dark .background-animation::before {
+  background: radial-gradient(circle, rgba(75, 85, 99, 0.3) 0%, rgba(55, 65, 81, 0.2) 50%, rgba(31, 41, 55, 0) 100%);
+}
+
+@keyframes moveBackground {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-50%, -50%); }
+}
+
+/* Placeholder image style (if image missing) */
+.laptop-placeholder {
+  background: repeating-linear-gradient(135deg, #e5e7eb, #e5e7eb 10px, #f3f4f6 10px, #f3f4f6 20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  font-size: 1.25rem;
+  height: 160px;
+  border-radius: 0.5rem;
+}
+
+/* Smooth transition for theme toggle */
+#themeToggle {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Remove previous header pulse animation */
+.pulse {
+  animation: none;
+}
+
+/* Enhanced hover effect for laptop cards */
+#laptopGrid > div:hover {
+  transform: scale(1.03) rotate(0deg); /* Slightly less rotation for classic feel */
+  box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.1), 0 8px 8px -4px rgba(0, 0, 0, 0.03);
+}
+
+/* Contact Page Styles */
+.contact-card {
+  background-color: var(--card-bg-light);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  max-width: 42rem;
+  margin: 0 auto;
+  transition: background-color var(--transition-duration) var(--transition-timing);
+}
+
+.dark .contact-card {
+  background-color: var(--card-bg-dark);
+}
+
+.contact-info {
+  margin-bottom: 1.5rem;
+  color: var(--contact-text-gray-700-light);
+  transition: color var(--transition-duration) var(--transition-timing);
+}
+
+.dark .contact-info {
+  color: var(--contact-text-gray-700-dark);
+}
+
+.contact-link {
+  color: var(--contact-link-light);
+  transition: color var(--transition-duration) var(--transition-timing);
+}
+
+.contact-link:hover {
+  text-decoration: underline;
+}
+
+.dark .contact-link {
+    color: var(--contact-link-dark);
+}
+
+.contact-link.whatsapp {
+  color: var(--contact-whatsapp-link-light);
+}
+
+.dark .contact-link.whatsapp {
+    color: var(--contact-whatsapp-link-dark);
+}
+
+.contact-link.instagram {
+  color: var(--contact-instagram-link-light);
+}
+
+.dark .contact-link.instagram {
+    color: var(--contact-instagram-link-dark);
+}
+
+.map-container {
+  margin-bottom: 1.5rem;
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.form-group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--form-label-light);
+  transition: color var(--transition-duration) var(--transition-timing);
+}
+
+.dark .form-group label {
+  color: var(--form-label-dark);
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--form-border-light);
+  border-radius: 0.25rem;
+  transition: all var(--transition-duration) var(--transition-timing);
+  background-color: var(--body-bg-light);
+  color: var(--body-text-light);
+}
+
+.dark .form-group input,
+.dark .form-group textarea {
+  background-color: var(--card-bg-dark);
+  color: var(--body-text-dark);
+  border-color: var(--form-border-dark);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--form-focus-border-light);
+  box-shadow: 0 0 0 2px var(--form-focus-shadow-light);
+}
+
+.dark .form-group input:focus,
+.dark .form-group textarea:focus {
+  border-color: var(--form-focus-border-dark);
+  box-shadow: 0 0 0 2px var(--form-focus-shadow-dark);
+}
+
+.submit-button {
+  background-color: var(--submit-button-bg-light);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  transition: background-color var(--transition-duration) var(--transition-timing);
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: var(--submit-button-hover-bg-light);
+}
+
+.submit-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.form-note {
+  font-size: 0.75rem;
+  color: var(--form-note-light);
+  transition: color var(--transition-duration) var(--transition-timing);
+}
+
+.dark .form-note {
+  color: var(--form-note-dark);
+}
+
+/* Dark mode styles for contact page */
+/* Variables handled above */
