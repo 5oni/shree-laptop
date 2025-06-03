@@ -12,12 +12,12 @@
   <div class="background-animation"></div>
   <!-- Header -->
   <header class="main-header">
-    <div class="container header-content">
+    <div class="container header-content flex flex-col md:flex-row items-center justify-between">
       <div>
         <h1 class="text-3xl font-bold">Shree Laptop Solutions</h1>
         <p class="text-sm md:text-base mt-1">Quality Laptops & Accessories</p>
       </div>
-      <nav class="main-nav">
+      <nav class="main-nav mt-4 md:mt-0">
         <a href="index.html" class="nav-link">Home</a>
         <a href="contact.html" class="nav-link">Contact</a>
         <button id="themeToggle" class="theme-toggle">
@@ -29,14 +29,23 @@
   </header>
 
   <!-- Search Bar -->
-  <section class="container pt-32 pb-10 relative z-10">
-    <input id="searchBar" type="text" placeholder="Search laptops..." class="search-bar" />
+  <section class="container pt-40 md:pt-32 pb-10 relative z-10">
+    <input id="searchBar" type="text" placeholder="Search products..." class="search-bar" />
   </section>
 
-  <!-- Laptop Grid -->
+  <!-- Product Type Filter -->
+  <section class="container relative z-10">
+    <div class="product-type-filter-container">
+      <button class="product-type-filter active" data-type="all">All Products</button>
+      <button class="product-type-filter" data-type="laptops">Laptops</button>
+      <button class="product-type-filter" data-type="accessories">Accessories</button>
+    </div>
+  </section>
+
+  <!-- Product Grid -->
   <main class="container relative z-10">
-    <div id="laptopGrid" class="laptop-grid">
-      <!-- JS will inject laptop cards here -->
+    <div id="productGrid" class="product-grid">
+      <!-- JS will inject product cards here -->
     </div>
   </main>
 
@@ -48,6 +57,7 @@
   </footer>
 
   <script src="assets/js/laptops.js"></script>
+  <script src="assets/js/accessories.js"></script>
   <script src="assets/js/main.js" type="module"></script>
 </body>
 </html>

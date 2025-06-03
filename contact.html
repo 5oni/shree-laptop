@@ -34,9 +34,9 @@
     <div class="contact-card">
       <h2 class="text-2xl font-semibold mb-4">Contact Us</h2>
       <div class="contact-info">
-        <p class="mb-1"><span class="font-semibold">Phone:</span> <a href="#" class="contact-link phone-link">Loading...</a></p>
-        <p class="mb-1"><span class="font-semibold">WhatsApp:</span> <a href="#" class="contact-link whatsapp whatsapp-link">Loading...</a></p>
-        <p class="mb-1"><span class="font-semibold">Instagram:</span> <a href="#" class="contact-link instagram instagram-link">Loading...</a></p>
+        <p class="mb-1"><span class="font-semibold">Phone:</span> <a href="#" class="contact-link phone-link" target="_blank">Loading...</a></p>
+        <p class="mb-1"><span class="font-semibold">WhatsApp:</span> <a href="#" class="contact-link whatsapp whatsapp-link" target="_blank">Loading...</a></p>
+        <p class="mb-1"><span class="font-semibold">Instagram:</span> <a href="#" class="contact-link instagram instagram-link" target="_blank">Loading...</a></p>
         <p class="mb-1"><span class="font-semibold">Location:</span> <a href="#map" class="contact-link">View on Map</a></p>
       </div>
       <div class="map-container" id="map">
@@ -88,7 +88,7 @@
 
       const instagramLink = document.querySelector('.instagram-link');
       if (instagramLink) {
-        instagramLink.href = window.CONTACT.INSTAGRAM;
+        instagramLink.href = `https://www.instagram.com/${window.CONTACT.INSTAGRAM}`;
         instagramLink.textContent = window.CONTACT.INSTAGRAM_HANDLE || 'Follow us on Instagram';
       }
     }
