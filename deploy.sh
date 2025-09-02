@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Deploy script for GitHub Pages
-# This script builds the Next.js app on website branch and pushes only the build folder
+# This script builds on main branch and pushes only the build contents to website branch
 
 set -e  # Exit on any error
 
@@ -14,33 +14,13 @@ if [ "$current_branch" != "main" ]; then
     exit 1
 fi
 
-# Switch to website branch (create if it doesn't exist)
-echo "🔄 Switching to website branch..."
-if git show-ref --verify --quiet refs/heads/website; then
-    git checkout website
-    git pull origin website 2>/dev/null || echo "Could not pull website, continuing..."
-else
-    git checkout --orphan website
-fi
-
-# Clear staging area to avoid conflicts
-echo "🧹 Clearing staging area..."
-git reset
-
-# Remove out/ from .gitignore on website branch so we can commit it
-echo "📝 Updating .gitignore for website branch..."
-if [ -f ".gitignore" ]; then
-    # Remove out/ line from .gitignore temporarily
-    sed -i.bak '/^out\/$/d' .gitignore 2>/dev/null || sed -i '' '/^out\/$/d' .gitignore 2>/dev/null || true
-fi
-
 # Check if node_modules exists, if not install dependencies
 if [ ! -d "node_modules" ]; then
     echo "📦 Installing dependencies..."
     npm install
 fi
 
-# Build the project on website branch
+# Build the project on main branch
 echo "📦 Building Next.js project..."
 npm run build
 
@@ -62,10 +42,27 @@ if [ -f "CNAME" ]; then
     cp CNAME out/CNAME
 fi
 
-# Move contents of out/ to root level
-echo "📋 Moving build contents to root level..."
-cp -r out/* . 2>/dev/null || true
-cp out/.nojekyll . 2>/dev/null || true
+# Switch to website branch (create if it doesn't exist)
+echo "🔄 Switching to website branch..."
+if git show-ref --verify --quiet refs/heads/website; then
+    git checkout website
+    git pull origin website 2>/dev/null || echo "Could not pull website, continuing..."
+else
+    git checkout --orphan website
+fi
+
+# Clear staging area to avoid conflicts
+echo "🧹 Clearing staging area..."
+git reset
+
+# Clear all files except .git
+echo "🧹 Clearing website branch..."
+find . -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} + 2>/dev/null || true
+
+# Copy build contents from main branch to root level
+echo "📋 Copying build contents to root level..."
+cp -r ../main/out/* . 2>/dev/null || true
+cp ../main/out/.nojekyll . 2>/dev/null || true
 
 # Stage and commit the build contents at root level
 echo "💾 Staging and committing build contents..."
@@ -76,19 +73,9 @@ git commit -m "Deploy to GitHub Pages - $(date)" || echo "No changes to commit"
 echo "⬆️ Pushing to website branch..."
 git push origin website
 
-
-git reset --hard
-git clean -fd
-
 # Switch back to main branch
 echo "🔄 Switching back to main branch..."
 git checkout main
-
-# Restore original .gitignore on main branch
-echo "📝 Restoring .gitignore on main branch..."
-if [ -f ".gitignore.bak" ]; then
-    mv .gitignore.bak .gitignore
-fi
 
 echo "✅ Deployment completed successfully!"
 echo "🌐 Your site should be available at: https://5oni.github.io/shree-laptop"
