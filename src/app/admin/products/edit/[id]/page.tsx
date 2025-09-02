@@ -2,8 +2,11 @@ import EditProductClient from './EditProductClient';
 
 // Generate static params for static export
 export async function generateStaticParams() {
-  // Return empty array for static export - dynamic routes will be handled client-side
-  return [];
+  // For static export, we need to provide at least one static param
+  // This will generate a placeholder page that handles dynamic behavior client-side
+  return [
+    { id: 'placeholder' }
+  ];
 }
 
 interface EditProductPageProps {
@@ -13,7 +16,6 @@ interface EditProductPageProps {
 }
 
 export default async function EditProductPage({ params }: EditProductPageProps) {
-  // For static export, we'll let the client component handle the dynamic behavior
   const { id } = await params;
   return <EditProductClient productId={id} />;
 }
