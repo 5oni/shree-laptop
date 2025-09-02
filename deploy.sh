@@ -48,6 +48,12 @@ mkdir -p ../temp-build
 cp -r out/* ../temp-build/ 2>/dev/null || true
 cp out/.nojekyll ../temp-build/ 2>/dev/null || true
 
+# Preserve .env.local file
+if [ -f ".env.local" ]; then
+    echo "📝 Preserving .env.local file..."
+    cp .env.local ../temp-env-local
+fi
+
 # Switch to website branch (create if it doesn't exist)
 echo "🔄 Switching to website branch..."
 if git show-ref --verify --quiet refs/heads/website; then
@@ -86,6 +92,13 @@ git push origin website
 # Switch back to main branch
 echo "🔄 Switching back to main branch..."
 git checkout main
+
+# Restore .env.local file if it was preserved
+if [ -f "../temp-env-local" ]; then
+    echo "📝 Restoring .env.local file..."
+    cp ../temp-env-local .env.local
+    rm ../temp-env-local
+fi
 
 echo "✅ Deployment completed successfully!"
 echo "🌐 Your site should be available at: https://5oni.github.io/shree-laptop"
