@@ -55,7 +55,11 @@ else
     git rm -rf . || true
 fi
 
-# Copy built files
+# Clear the gh-pages branch completely
+echo "🧹 Clearing gh-pages branch..."
+git rm -rf . || true
+
+# Copy ONLY the built files from out/ directory
 echo "📋 Copying built files..."
 cp -r out/* .
 cp out/.nojekyll . 2>/dev/null || true
