@@ -11,6 +11,11 @@ export default function LaptopSpecsDisplay({ specs }: LaptopSpecsDisplayProps) {
     return null;
   }
 
+  // Helper function to filter and type items properly
+  const filterItems = (items: Array<{ label: string; value: string | number | boolean | string[] } | false | undefined | string | number>) => {
+    return items.filter((item): item is { label: string; value: string | number | boolean | string[] } => Boolean(item) && typeof item === 'object' && item !== null);
+  };
+
   const renderSpecSection = (title: string, icon: string, items: Array<{ label: string; value: string | number | boolean | string[] }>) => {
     if (items.length === 0) return null;
 
@@ -34,58 +39,58 @@ export default function LaptopSpecsDisplay({ specs }: LaptopSpecsDisplayProps) {
     );
   };
 
-  const processorItems = [
+  const processorItems = filterItems([
     specs.processor && { label: 'Processor', value: specs.processor },
     specs.processorGeneration && { label: 'Generation', value: specs.processorGeneration },
     specs.processorCores && { label: 'Cores', value: `${specs.processorCores} cores` },
     specs.processorSpeed && { label: 'Base Speed', value: specs.processorSpeed },
-  ].filter(Boolean);
+  ]);
 
-  const memoryItems = [
+  const memoryItems = filterItems([
     specs.ram && { label: 'RAM', value: specs.ram },
     specs.ramType && { label: 'RAM Type', value: specs.ramType },
     specs.maxRam && { label: 'Max RAM', value: specs.maxRam },
     specs.ramUpgradeable !== undefined && { label: 'Upgradeable', value: specs.ramUpgradeable ? 'Yes' : 'No' },
-  ].filter(Boolean);
+  ]);
 
-  const storageItems = [
+  const storageItems = filterItems([
     specs.storage && { label: 'Primary Storage', value: specs.storage },
     specs.storageType && { label: 'Storage Type', value: specs.storageType },
     specs.additionalStorage && { label: 'Additional Storage', value: specs.additionalStorage },
     specs.storageUpgradeable !== undefined && { label: 'Upgradeable', value: specs.storageUpgradeable ? 'Yes' : 'No' },
-  ].filter(Boolean);
+  ]);
 
-  const graphicsItems = [
+  const graphicsItems = filterItems([
     specs.graphics && { label: 'Graphics Card', value: specs.graphics },
     specs.graphicsType && { label: 'Type', value: specs.graphicsType },
     specs.graphicsMemory && { label: 'Memory', value: specs.graphicsMemory },
-  ].filter(Boolean);
+  ]);
 
-  const displayItems = [
+  const displayItems = filterItems([
     specs.displaySize && { label: 'Size', value: specs.displaySize },
     specs.displayResolution && { label: 'Resolution', value: specs.displayResolution },
     specs.displayType && { label: 'Type', value: specs.displayType },
     specs.displayFeatures && specs.displayFeatures.length > 0 && { label: 'Features', value: specs.displayFeatures },
-  ].filter(Boolean);
+  ]);
 
-  const connectivityItems = [
+  const connectivityItems = filterItems([
     specs.ports && specs.ports.length > 0 && { label: 'Ports', value: specs.ports },
     specs.wireless && specs.wireless.length > 0 && { label: 'Wireless', value: specs.wireless },
-  ].filter(Boolean);
+  ]);
 
-  const otherItems = [
+  const otherItems = filterItems([
     specs.operatingSystem && { label: 'Operating System', value: specs.operatingSystem },
     specs.battery && { label: 'Battery', value: specs.battery },
     specs.weight && { label: 'Weight', value: specs.weight },
     specs.dimensions && { label: 'Dimensions', value: specs.dimensions },
     specs.color && { label: 'Color', value: specs.color },
-  ].filter(Boolean);
+  ]);
 
-  const upgradeItems = [
+  const upgradeItems = filterItems([
     specs.upgradeOptions?.ram && specs.upgradeOptions.ram.length > 0 && { label: 'RAM Upgrades', value: specs.upgradeOptions.ram },
     specs.upgradeOptions?.storage && specs.upgradeOptions.storage.length > 0 && { label: 'Storage Upgrades', value: specs.upgradeOptions.storage },
     specs.upgradeOptions?.other && specs.upgradeOptions.other.length > 0 && { label: 'Other Upgrades', value: specs.upgradeOptions.other },
-  ].filter(Boolean);
+  ]);
 
   return (
     <div className="space-y-6">
