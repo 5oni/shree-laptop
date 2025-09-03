@@ -117,7 +117,7 @@ export default function LaptopSpecsDisplay({ specs }: LaptopSpecsDisplayProps) {
               🔧 Available Upgrades
             </h3>
             <p className="text-blue-700 dark:text-blue-300 mb-4">
-              Enhance your laptop's performance with our upgrade options
+              Enhance your laptop&apos;s performance with our upgrade options
             </p>
             <div className="flex flex-wrap justify-center gap-2">
               {specs.upgradeOptions?.ram?.map((option, index) => (

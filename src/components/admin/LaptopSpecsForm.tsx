@@ -31,7 +31,7 @@ const OS_OPTIONS = ['Windows 11', 'Windows 10', 'macOS', 'Linux', 'Chrome OS'];
 export default function LaptopSpecsForm({ specs, onChange }: LaptopSpecsFormProps) {
   const [activeTab, setActiveTab] = useState('processor');
 
-  const updateSpec = (key: keyof LaptopSpecs, value: any) => {
+  const updateSpec = (key: keyof LaptopSpecs, value: string | number | boolean | string[] | undefined) => {
     onChange({ ...specs, [key]: value });
   };
 

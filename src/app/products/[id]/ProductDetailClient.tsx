@@ -373,7 +373,7 @@ export default function ProductDetailClient({ productId }: ProductDetailClientPr
                 <div>
                   <h3 className="font-bold text-blue-800 dark:text-blue-200 mb-2">⚡ Limited Time Offer!</h3>
                   <p className="text-blue-700 dark:text-blue-300 text-sm mb-3">
-                    Contact us now for exclusive pricing, warranty details, and free consultation. Don't miss out on this amazing deal!
+                    Contact us now for exclusive pricing, warranty details, and free consultation. Don&apos;t miss out on this amazing deal!
                   </p>
                   <div className="flex flex-wrap gap-2 text-xs">
                     <span className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 px-2 py-1 rounded-full">✅ Free Consultation</span>
