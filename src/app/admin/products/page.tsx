@@ -41,7 +41,14 @@ export default function ProductsPage() {
       product.specs.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.price.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesType = filterType === 'all' || product.type === filterType;
+    let matchesType = true;
+    if (filterType === 'featured') {
+      matchesType = product.featured === true;
+    } else if (filterType === 'discounted') {
+      matchesType = (product.discount && product.discount > 0) || false;
+    } else if (filterType !== 'all') {
+      matchesType = product.type === filterType;
+    }
 
     return matchesSearch && matchesType;
   });
@@ -136,6 +143,8 @@ export default function ProductsPage() {
           <option value="all">All Types</option>
           <option value="laptop">Laptops</option>
           <option value="accessory">Accessories</option>
+          <option value="featured">Featured</option>
+          <option value="discounted">Discounted</option>
         </select>
       </div>
 
@@ -182,18 +191,30 @@ export default function ProductsPage() {
                     <tr key={product.id}>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="h-12 w-12 relative">
-                          {product.image && product.image.trim() !== '' ? (
-                            <img
-                              src={product.image}
-                              alt={product.name}
-                              className="h-12 w-12 object-cover rounded"
-                              onError={handleImageError}
-                            />
-                          ) : (
-                            <div className="h-12 w-12 flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded">
-                              <span className="text-xs text-gray-500 dark:text-gray-400">No Image</span>
-                            </div>
-                          )}
+                          {(() => {
+                            const allImages = product.images && product.images.length > 0 ? product.images : (product.image ? [product.image] : []);
+                            const displayImage = allImages[0];
+                            
+                            return displayImage && displayImage.trim() !== '' ? (
+                              <div className="relative">
+                                <img
+                                  src={displayImage}
+                                  alt={product.name}
+                                  className="h-12 w-12 object-contain rounded bg-gray-100 dark:bg-gray-700"
+                                  onError={handleImageError}
+                                />
+                                {allImages.length > 1 && (
+                                  <div className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                                    {allImages.length}
+                                  </div>
+                                )}
+                              </div>
+                            ) : (
+                              <div className="h-12 w-12 flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded">
+                                <span className="text-xs text-gray-500 dark:text-gray-400">No Image</span>
+                              </div>
+                            );
+                          })()}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -221,6 +242,12 @@ export default function ProductsPage() {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <Link
+                          href={`/admin/products/${product.id}`}
+                          className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300 mr-4"
+                        >
+                          View
+                        </Link>
                         <button
                           onClick={() => handleEdit(product)}
                           className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 mr-4"
@@ -256,18 +283,30 @@ export default function ProductsPage() {
                     {/* Product Image */}
                     <div className="flex-shrink-0">
                       <div className="h-16 w-16 relative">
-                        {product.image && product.image.trim() !== '' ? (
-                          <img
-                            src={product.image}
-                            alt={product.name}
-                            className="h-16 w-16 object-cover rounded"
-                            onError={handleImageError}
-                          />
-                        ) : (
-                          <div className="h-16 w-16 flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded">
-                            <span className="text-xs text-gray-500 dark:text-gray-400">No Image</span>
-                          </div>
-                        )}
+                        {(() => {
+                          const allImages = product.images && product.images.length > 0 ? product.images : (product.image ? [product.image] : []);
+                          const displayImage = allImages[0];
+                          
+                          return displayImage && displayImage.trim() !== '' ? (
+                            <div className="relative">
+                              <img
+                                src={displayImage}
+                                alt={product.name}
+                                className="h-16 w-16 object-contain rounded bg-gray-100 dark:bg-gray-700"
+                                onError={handleImageError}
+                              />
+                              {allImages.length > 1 && (
+                                <div className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                                  {allImages.length}
+                                </div>
+                              )}
+                            </div>
+                          ) : (
+                            <div className="h-16 w-16 flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded">
+                              <span className="text-xs text-gray-500 dark:text-gray-400">No Image</span>
+                            </div>
+                          );
+                        })()}
                       </div>
                     </div>
                     
@@ -298,6 +337,12 @@ export default function ProductsPage() {
                       
                       {/* Action Buttons */}
                       <div className="flex gap-2 mt-3">
+                        <Link
+                          href={`/admin/products/${product.id}`}
+                          className="flex-1 px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md transition-colors text-center"
+                        >
+                          View
+                        </Link>
                         <button
                           onClick={() => handleEdit(product)}
                           className="flex-1 px-3 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-md transition-colors"

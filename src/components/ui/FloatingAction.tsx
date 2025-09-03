@@ -11,9 +11,9 @@ export default function FloatingAction() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-40">
+    <div className="fixed bottom-24 right-6 z-50 floating-action">
       {/* Action buttons that appear when menu is open */}
-      <div className={`flex flex-col-reverse gap-3 mb-3 transition-all duration-300 ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}>
+      <div className={`flex flex-col-reverse gap-3 mb-3 transition-all duration-300 ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`} style={{ zIndex: 9998 }}>
         <Link 
           href="/contact"
           className="w-12 h-12 rounded-full bg-accent-500 text-white flex items-center justify-center shadow-lg hover:bg-accent-600 transition-colors hover:scale-110 transform"
@@ -53,7 +53,8 @@ export default function FloatingAction() {
       {/* Main floating button */}
       <button 
         onClick={toggleMenu}
-        className={`w-14 h-14 rounded-full bg-gradient-to-r ${isOpen ? 'from-red-500 to-red-600 rotate-45' : 'from-primary-500 to-accent-500'} text-white flex items-center justify-center shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105`}
+        className={`w-14 h-14 rounded-full bg-gradient-to-r ${isOpen ? 'from-red-500 to-red-600 rotate-45' : 'from-primary-500 to-accent-500'} text-white flex items-center justify-center shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 relative`}
+        style={{ zIndex: 9999 }}
         aria-label={isOpen ? "Close menu" : "Open menu"}
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">

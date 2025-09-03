@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import SearchBar from '@/components/ui/SearchBar';
 import ProductTypeFilter from '@/components/ui/ProductTypeFilter';
 import ProductCard from '@/components/ui/ProductCard';
@@ -8,6 +9,7 @@ import { Product } from '@/types';
 import * as productService from '@/lib/services/productService';
 
 export default function Home() {
+  const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeType, setActiveType] = useState('all');
   const [products, setProducts] = useState<Product[]>([]);
@@ -20,6 +22,14 @@ export default function Home() {
   useEffect(() => {
     setIsVisible(true);
   }, []);
+
+  // Handle URL parameters for filtering
+  useEffect(() => {
+    const typeParam = searchParams.get('type');
+    if (typeParam && (typeParam === 'laptop' || typeParam === 'accessory')) {
+      setActiveType(typeParam);
+    }
+  }, [searchParams]);
 
   // Fetch products from Firestore
   useEffect(() => {
@@ -57,8 +67,18 @@ export default function Home() {
       return matchesSearch && matchesType;
     });
 
-    setFilteredProducts(filtered);
+    // Sort products: featured first, then by creation date
+    const sorted = filtered.sort((a, b) => {
+      if (a.featured && !b.featured) return -1;
+      if (!a.featured && b.featured) return 1;
+      return new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime();
+    });
+
+    setFilteredProducts(sorted);
   }, [searchQuery, activeType, products]);
+
+  // Get featured products
+  const featuredProducts = products.filter(product => product.featured).slice(0, 4);
 
   return (
     <div className="space-y-16">
@@ -111,6 +131,35 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Featured Products Section */}
+      {featuredProducts.length > 0 && (
+        <section className="py-16 bg-gradient-to-r from-primary-50 to-accent-50 dark:from-gray-800 dark:to-gray-900">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4 font-montserrat text-gray-800 dark:text-white inline-block relative">
+                ⭐ Featured Products
+                <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 h-1 w-24 bg-primary-500 rounded-full"></span>
+              </h2>
+              <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto font-raleway">
+                Check out our handpicked selection of the best deals and quality products.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {featuredProducts.map((product, index) => (
+                <div 
+                  key={product.id} 
+                  className="transition-all duration-500"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <ProductCard product={product} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Main Content */}
       <section id="products" className="pt-8 scroll-mt-24 container mx-auto px-4">

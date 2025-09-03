@@ -119,6 +119,22 @@ export default function Header() {
               Home
             </Link>
             <Link 
+              href="/#products?type=laptop" 
+              className={`text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors ${
+                pathname.includes('laptop') ? 'font-semibold text-primary-600 dark:text-primary-400' : ''
+              }`}
+            >
+              Laptops
+            </Link>
+            <Link 
+              href="/#products?type=accessory" 
+              className={`text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors ${
+                pathname.includes('accessory') ? 'font-semibold text-primary-600 dark:text-primary-400' : ''
+              }`}
+            >
+              Accessories
+            </Link>
+            <Link 
               href="/contact" 
               className={`text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors ${
                 pathname === '/contact' ? 'font-semibold text-primary-600 dark:text-primary-400' : ''
@@ -173,6 +189,22 @@ export default function Header() {
                 } hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors`}
               >
                 Home
+              </Link>
+              <Link 
+                href="/#products?type=laptop" 
+                className={`px-3 py-2 rounded-md ${
+                  pathname.includes('laptop') ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400' : 'text-gray-600 dark:text-gray-300'
+                } hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors`}
+              >
+                Laptops
+              </Link>
+              <Link 
+                href="/#products?type=accessory" 
+                className={`px-3 py-2 rounded-md ${
+                  pathname.includes('accessory') ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400' : 'text-gray-600 dark:text-gray-300'
+                } hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors`}
+              >
+                Accessories
               </Link>
               <Link 
                 href="/contact" 

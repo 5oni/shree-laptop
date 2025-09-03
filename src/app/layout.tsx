@@ -4,6 +4,7 @@ import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import FloatingAction from '@/components/ui/FloatingAction';
+import TawkTo from '@/components/ui/TawkTo';
 import { Providers } from './providers';
 
 const poppins = Poppins({ 
@@ -54,6 +55,7 @@ export default function RootLayout({
           </main>
           <Footer />
           <FloatingAction />
+          <TawkTo />
         </Providers>
       </body>
     </html>
