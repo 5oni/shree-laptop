@@ -17,5 +17,11 @@ interface EditProductPageProps {
 
 export default async function EditProductPage({ params }: EditProductPageProps) {
   const { id } = await params;
+  
+  // For static export, if we get a placeholder ID, we'll handle it client-side
+  if (id === 'placeholder') {
+    return <EditProductClient productId="" />;
+  }
+  
   return <EditProductClient productId={id} />;
 }

@@ -21,6 +21,12 @@ export default function EditProductClient({ productId }: EditProductClientProps)
   useEffect(() => {
     const fetchProduct = async () => {
       try {
+        // Skip fetching if productId is empty (placeholder case)
+        if (!productId || productId === 'placeholder') {
+          setIsLoadingProduct(false);
+          return;
+        }
+        
         const foundProduct = await getProductById(productId);
         
         if (!foundProduct) {
@@ -63,6 +69,22 @@ export default function EditProductClient({ productId }: EditProductClientProps)
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin h-10 w-10 border-4 border-blue-600 border-t-transparent rounded-full"></div>
+      </div>
+    );
+  }
+
+  // Handle placeholder case for static export
+  if (!productId || productId === 'placeholder') {
+    return (
+      <div className="bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200 p-6 rounded-lg">
+        <h1 className="text-xl font-bold mb-2">Edit Product</h1>
+        <p>Please navigate to a specific product to edit it.</p>
+        <button
+          onClick={() => router.push('/admin/products')}
+          className="mt-4 px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-md transition-colors"
+        >
+          Back to Products
+        </button>
       </div>
     );
   }
