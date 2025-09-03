@@ -7,7 +7,6 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "./deploy.sh",
     "setup:admin": "node -e \"console.log('Please see SUPABASE_SETUP.md for instructions on setting up admin users')\""
   },
   "dependencies": {
