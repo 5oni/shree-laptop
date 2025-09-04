@@ -5,6 +5,9 @@ import { useRouter } from 'next/navigation';
 import { Product, LaptopSpecs } from '@/types';
 import { uploadProductImage } from '@/lib/services/supabaseService';
 import LaptopSpecsForm from './LaptopSpecsForm';
+import FreeGiftForm from './FreeGiftForm';
+import LaptopConditionForm from './LaptopConditionForm';
+import imageCompression from 'browser-image-compression';
 
 interface ProductFormProps {
   product?: Product;
@@ -28,6 +31,21 @@ export default function ProductForm({ product, onSubmit, isLoading }: ProductFor
   const [imagePreview, setImagePreview] = useState<string | null>(product?.image || null);
   const [imagePreviews, setImagePreviews] = useState<string[]>(product?.images || []);
   const [detailedSpecs, setDetailedSpecs] = useState<LaptopSpecs>(product?.detailedSpecs || {});
+  const [freeGifts, setFreeGifts] = useState(product?.freeGifts || []);
+  const [laptopCondition, setLaptopCondition] = useState(product?.laptopCondition || {
+    overall: 'excellent' as const,
+    details: {
+      scratches: 'none' as const,
+      dents: 'none' as const,
+      colorFading: 'none' as const,
+      screenCondition: 'perfect' as const,
+      keyboardCondition: 'perfect' as const,
+      batteryHealth: 'excellent' as const,
+      chargerIncluded: true,
+      boxIncluded: true,
+      warrantyRemaining: '',
+    },
+  });
   const [error, setError] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -39,7 +57,24 @@ export default function ProductForm({ product, onSubmit, isLoading }: ProductFor
     }
   }, [type]);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const compressImage = async (file: File): Promise<File> => {
+    try {
+      const options = {
+        maxSizeMB: 2, // Compress to max 2MB
+        maxWidthOrHeight: 1920, // Max width or height
+        useWebWorker: true,
+        quality: 0.8, // 80% quality
+      };
+      
+      const compressedFile = await imageCompression(file, options);
+      return compressedFile;
+    } catch (error) {
+      console.error('Error compressing image:', error);
+      return file; // Return original if compression fails
+    }
+  };
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
     
@@ -50,29 +85,40 @@ export default function ProductForm({ product, onSubmit, isLoading }: ProductFor
         return;
       }
       
-      if (file.size > 5 * 1024 * 1024) {
-        setError('Each image should be less than 5MB');
+      if (file.size > 50 * 1024 * 1024) { // Increased to 50MB
+        setError('Each image should be less than 50MB');
         return;
       }
     }
     
-    // Limit to 5 images maximum
-    if (imagePreviews.length + files.length > 5) {
-      setError('Maximum 5 images allowed');
+    // Limit to 10 images maximum
+    if (imagePreviews.length + files.length > 10) {
+      setError('Maximum 10 images allowed');
       return;
     }
     
-    // Create preview URLs for new files
-    const newPreviewUrls = files.map(file => URL.createObjectURL(file));
-    setImagePreviews(prev => [...prev, ...newPreviewUrls]);
-    setSelectedFiles(prev => [...prev, ...files]);
-    
-    // Set first image as primary if no primary image exists
-    if (!imagePreview) {
-      setImagePreview(newPreviewUrls[0]);
-    }
-    
     setError('');
+    setIsUploading(true);
+    
+    try {
+      // Compress all images
+      const compressedFiles = await Promise.all(files.map(compressImage));
+      
+      // Create preview URLs for compressed files
+      const newPreviewUrls = compressedFiles.map(file => URL.createObjectURL(file));
+      setImagePreviews(prev => [...prev, ...newPreviewUrls]);
+      setSelectedFiles(prev => [...prev, ...compressedFiles]);
+      
+      // Set first image as primary if no primary image exists
+      if (!imagePreview) {
+        setImagePreview(newPreviewUrls[0]);
+      }
+    } catch (error) {
+      console.error('Error processing images:', error);
+      setError('Error processing images. Please try again.');
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   // Clean up object URLs when component unmounts
@@ -140,22 +186,24 @@ export default function ProductForm({ product, onSubmit, isLoading }: ProductFor
       const primaryImage = imagePreview || allImages[0] || '';
       
       // Create a product data object that matches the required type
-      const productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt'> = {
-        name,
-        specs,
-        detailedSpecs: type === 'laptop' ? detailedSpecs : undefined,
-        price,
-        originalPrice: originalPrice || undefined,
-        discount: discount > 0 ? discount : undefined,
-        type,
-        category: category || undefined,
-        condition: condition || undefined,
-        warranty: warranty || undefined,
-        availability: availability || 'in_stock',
-        featured: featured || false,
-        image: primaryImage,
-        images: allImages,
-      };
+          const productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt'> = {
+      name,
+      specs,
+      detailedSpecs: type === 'laptop' ? detailedSpecs : undefined,
+      price,
+      originalPrice: originalPrice || undefined,
+      discount: discount > 0 ? discount : undefined,
+      type,
+      category: category || undefined,
+      condition: condition || undefined,
+      laptopCondition: type === 'laptop' ? laptopCondition : undefined,
+      freeGifts: type === 'laptop' ? freeGifts : undefined,
+      warranty: warranty || undefined,
+      availability: availability || 'in_stock',
+      featured: featured || false,
+      image: primaryImage,
+      images: allImages,
+    };
 
       // Pass the data to the parent component for submission
       await onSubmit(productData);
@@ -395,9 +443,35 @@ export default function ProductForm({ product, onSubmit, isLoading }: ProductFor
         </div>
       )}
 
+      {/* Free Gifts (Laptops only) */}
+      {type === 'laptop' && (
+        <div>
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+            🎁 Free Gifts with Laptop
+          </h3>
+          <FreeGiftForm
+            gifts={freeGifts}
+            onChange={setFreeGifts}
+          />
+        </div>
+      )}
+
+      {/* Laptop Condition Assessment (Laptops only) */}
+      {type === 'laptop' && (
+        <div>
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+            🔍 Laptop Condition Assessment
+          </h3>
+          <LaptopConditionForm
+            condition={laptopCondition}
+            onChange={setLaptopCondition}
+          />
+        </div>
+      )}
+
       <div>
         <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Product Images {imagePreviews.length > 0 && `(${imagePreviews.length}/5)`}
+          Product Images {imagePreviews.length > 0 && `(${imagePreviews.length}/10)`}
         </label>
         
         <div className="space-y-3">
@@ -460,13 +534,13 @@ export default function ProductForm({ product, onSubmit, isLoading }: ProductFor
           )}
           
           {/* File Input */}
-          {imagePreviews.length < 5 && (
+          {imagePreviews.length < 10 && (
             <div className="flex items-center justify-center">
-              <label className="flex items-center justify-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm cursor-pointer focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors">
+              <label className={`flex items-center justify-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm cursor-pointer focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                 </svg>
-                {imagePreviews.length > 0 ? 'Add More' : 'Upload Images'}
+                {isUploading ? '🔄 Compressing...' : (imagePreviews.length > 0 ? 'Add More (Max 10)' : 'Upload Images (Max 10, Auto-compressed)')}
                 <input
                   type="file"
                   id="images"
@@ -474,13 +548,14 @@ export default function ProductForm({ product, onSubmit, isLoading }: ProductFor
                   multiple
                   onChange={handleImageChange}
                   className="hidden"
+                  disabled={isUploading}
                 />
               </label>
             </div>
           )}
           
           <p className="text-xs text-gray-500 text-center">
-            JPG/PNG, max 5MB each. Max 5 images.
+            JPG/PNG, max 50MB each (auto-compressed to 2MB). Max 10 images.
           </p>
         </div>
       </div>

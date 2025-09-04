@@ -1,0 +1,11 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+# Host
+Host: https://shreelaptop.shop
+
+# Sitemaps
+Sitemap: https://shreelaptop.shop/sitemap.xml

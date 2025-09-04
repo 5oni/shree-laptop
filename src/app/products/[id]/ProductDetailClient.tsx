@@ -277,6 +277,91 @@ export default function ProductDetailClient({ productId }: ProductDetailClientPr
               <LaptopSpecsDisplay specs={product.detailedSpecs} />
             )}
 
+            {/* Free Gifts (Laptops only) */}
+            {product.type === 'laptop' && product.freeGifts && product.freeGifts.length > 0 && (
+              <div>
+                <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-3">🎁 Free Gifts Included</h2>
+                <div className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg p-6 border border-green-200 dark:border-green-800">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {product.freeGifts.map((gift, index) => (
+                      <div key={index} className="flex items-center gap-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                        <div className="text-2xl">
+                          {gift.category === 'bag' && '🎒'}
+                          {gift.category === 'keyboard' && '⌨️'}
+                          {gift.category === 'mouse' && '🖱️'}
+                          {gift.category === 'keyguard' && '🛡️'}
+                          {gift.category === 'mousepad' && '🖱️'}
+                          {gift.category === 'stand' && '📐'}
+                          {gift.category === 'cleaning' && '🧽'}
+                          {gift.category === 'airpods' && '🎧'}
+                          {gift.category === 'watch' && '⌚'}
+                          {gift.category === 'other' && '🎁'}
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-gray-800 dark:text-white">{gift.name}</h3>
+                          {gift.description && (
+                            <p className="text-sm text-gray-600 dark:text-gray-400">{gift.description}</p>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Laptop Condition Assessment (Laptops only) */}
+            {product.type === 'laptop' && product.laptopCondition && (
+              <div>
+                <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-3">🔍 Condition Assessment</h2>
+                <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+                  <div className="mb-4">
+                    <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">Overall Condition</h3>
+                    <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold ${
+                      product.laptopCondition.overall === 'excellent' 
+                        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                        : product.laptopCondition.overall === 'good'
+                        ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
+                        : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
+                    }`}>
+                      {product.laptopCondition.overall.charAt(0).toUpperCase() + product.laptopCondition.overall.slice(1)}
+                    </span>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <h4 className="font-semibold text-gray-700 dark:text-gray-300 mb-2">Physical Condition</h4>
+                      <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
+                        <div>Scratches: {product.laptopCondition.details.scratches || 'N/A'}</div>
+                        <div>Dents: {product.laptopCondition.details.dents || 'N/A'}</div>
+                        <div>Color Fading: {product.laptopCondition.details.colorFading || 'N/A'}</div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-semibold text-gray-700 dark:text-gray-300 mb-2">Component Condition</h4>
+                      <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
+                        <div>Screen: {product.laptopCondition.details.screenCondition || 'N/A'}</div>
+                        <div>Keyboard: {product.laptopCondition.details.keyboardCondition || 'N/A'}</div>
+                        <div>Battery: {product.laptopCondition.details.batteryHealth || 'N/A'}</div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-semibold text-gray-700 dark:text-gray-300 mb-2">Accessories</h4>
+                      <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
+                        <div>Charger: {product.laptopCondition.details.chargerIncluded ? '✅ Included' : '❌ Not Included'}</div>
+                        <div>Original Box: {product.laptopCondition.details.boxIncluded ? '✅ Included' : '❌ Not Included'}</div>
+                        {product.laptopCondition.details.warrantyRemaining && (
+                          <div>Warranty: {product.laptopCondition.details.warrantyRemaining}</div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Product Information Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Condition */}

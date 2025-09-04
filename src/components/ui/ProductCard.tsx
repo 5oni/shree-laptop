@@ -233,6 +233,65 @@ export default function ProductCard({ product }: ProductCardProps) {
           {product.specs}
         </p>
         
+        {/* Key Specifications for Laptops */}
+        {product.type === 'laptop' && product.detailedSpecs && (
+          <div className="mb-3 space-y-1">
+            <div className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+              Key Specs:
+            </div>
+            <div className="grid grid-cols-2 gap-1 text-xs text-gray-600 dark:text-gray-400">
+              {product.detailedSpecs.processor && (
+                <div className="flex items-center gap-1">
+                  <span className="text-blue-500">⚡</span>
+                  <span className="truncate">{product.detailedSpecs.processor}</span>
+                </div>
+              )}
+              {product.detailedSpecs.ram && (
+                <div className="flex items-center gap-1">
+                  <span className="text-purple-500">🧠</span>
+                  <span className="truncate">{product.detailedSpecs.ram}</span>
+                </div>
+              )}
+              {product.detailedSpecs.storage && (
+                <div className="flex items-center gap-1">
+                  <span className="text-green-500">💾</span>
+                  <span className="truncate">{product.detailedSpecs.storage}</span>
+                </div>
+              )}
+              {product.detailedSpecs.displaySize && (
+                <div className="flex items-center gap-1">
+                  <span className="text-orange-500">📺</span>
+                  <span className="truncate">{product.detailedSpecs.displaySize}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+        
+        {/* Free Gifts for Laptops */}
+        {product.type === 'laptop' && product.freeGifts && product.freeGifts.length > 0 && (
+          <div className="mb-3">
+            <div className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+              🎁 Free Gifts:
+            </div>
+            <div className="flex flex-wrap gap-1">
+              {product.freeGifts.slice(0, 3).map((gift, index) => (
+                <span
+                  key={index}
+                  className="text-xs bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 px-2 py-0.5 rounded-full"
+                >
+                  {gift.name}
+                </span>
+              ))}
+              {product.freeGifts.length > 3 && (
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  +{product.freeGifts.length - 3} more
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+        
         <div className="flex items-center justify-between mb-2">
           <div className="flex flex-col">
             {/* Contact for Price - Marketing Strategy */}
@@ -252,6 +311,17 @@ export default function ProductCard({ product }: ProductCardProps) {
               {product.condition && (
                 <span className="text-xs text-gray-500 dark:text-gray-400 capitalize">
                   {product.condition}
+                </span>
+              )}
+              {product.type === 'laptop' && product.laptopCondition && (
+                <span className={`text-xs px-2 py-0.5 rounded-full ${
+                  product.laptopCondition.overall === 'excellent' 
+                    ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                    : product.laptopCondition.overall === 'good'
+                    ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
+                    : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
+                }`}>
+                  {product.laptopCondition.overall}
                 </span>
               )}
               {product.warranty && (

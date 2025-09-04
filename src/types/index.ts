@@ -47,6 +47,29 @@ export interface LaptopSpecs {
   };
 }
 
+export interface FreeGift {
+  id: string;
+  name: string;
+  description?: string;
+  category: 'bag' | 'keyboard' | 'mouse' | 'keyguard' | 'mousepad' | 'stand' | 'cleaning' | 'airpods' | 'watch' | 'other';
+  isDefault?: boolean;
+}
+
+export interface LaptopCondition {
+  overall: 'excellent' | 'good' | 'poor';
+  details: {
+    scratches?: 'none' | 'minor' | 'moderate' | 'severe';
+    dents?: 'none' | 'minor' | 'moderate' | 'severe';
+    colorFading?: 'none' | 'slight' | 'moderate' | 'severe';
+    screenCondition?: 'perfect' | 'good' | 'minor_issues' | 'major_issues';
+    keyboardCondition?: 'perfect' | 'good' | 'minor_issues' | 'major_issues';
+    batteryHealth?: 'excellent' | 'good' | 'fair' | 'poor';
+    chargerIncluded?: boolean;
+    boxIncluded?: boolean;
+    warrantyRemaining?: string;
+  };
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -60,6 +83,8 @@ export interface Product {
   category?: string;
   type: 'laptop' | 'accessory';
   condition?: 'new' | 'used' | 'refurbished'; // Product condition
+  laptopCondition?: LaptopCondition; // Detailed condition for laptops
+  freeGifts?: FreeGift[]; // Free gifts included with laptops
   warranty?: string; // Warranty information
   availability?: 'in_stock' | 'out_of_stock' | 'limited'; // Stock status
   featured?: boolean; // Featured product flag

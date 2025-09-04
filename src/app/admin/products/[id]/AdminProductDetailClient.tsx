@@ -335,13 +335,57 @@ export default function AdminProductDetailClient({ productId }: AdminProductDeta
                 </p>
               </div>
 
-              {/* Detailed Laptop Specifications */}
-              {product.type === 'laptop' && product.detailedSpecs && (
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4">
-                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Detailed Specifications</h3>
-                  <LaptopSpecsDisplay specs={product.detailedSpecs} />
-                </div>
-              )}
+                                {/* Detailed Laptop Specifications */}
+                  {product.type === 'laptop' && product.detailedSpecs && (
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4">
+                      <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Detailed Specifications</h3>
+                      <LaptopSpecsDisplay specs={product.detailedSpecs} />
+                    </div>
+                  )}
+
+                  {/* Free Gifts (Laptops only) */}
+                  {product.type === 'laptop' && product.freeGifts && product.freeGifts.length > 0 && (
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4">
+                      <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">🎁 Free Gifts</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {product.freeGifts.map((gift, index) => (
+                          <span
+                            key={index}
+                            className="text-xs bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 px-2 py-1 rounded-full"
+                          >
+                            {gift.name}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Laptop Condition (Laptops only) */}
+                  {product.type === 'laptop' && product.laptopCondition && (
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4">
+                      <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">🔍 Condition Assessment</h3>
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Overall:</span>
+                          <span className={`text-xs px-2 py-1 rounded-full ${
+                            product.laptopCondition.overall === 'excellent' 
+                              ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                              : product.laptopCondition.overall === 'good'
+                              ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
+                              : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
+                          }`}>
+                            {product.laptopCondition.overall}
+                          </span>
+                        </div>
+                        <div className="text-xs text-gray-600 dark:text-gray-400">
+                          <div>Scratches: {product.laptopCondition.details.scratches || 'N/A'}</div>
+                          <div>Dents: {product.laptopCondition.details.dents || 'N/A'}</div>
+                          <div>Screen: {product.laptopCondition.details.screenCondition || 'N/A'}</div>
+                          <div>Battery: {product.laptopCondition.details.batteryHealth || 'N/A'}</div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
               {/* Metadata */}
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4">
