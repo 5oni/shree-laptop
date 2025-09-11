@@ -1,21 +1,9 @@
-import { getProductById, getProducts } from '@/lib/services/supabaseService';
+import { getProductById } from '@/lib/services/supabaseService';
 import EditProductClient from './EditProductClient';
 import { notFound } from 'next/navigation';
 
-// Generate static params for existing products (optional for SEO)
-export async function generateStaticParams() {
-  try {
-    const products = await getProducts();
-    return products.map((product) => ({
-      id: product.id,
-    }));
-  } catch (error) {
-    console.error('Error generating static params:', error);
-    return [];
-  }
-}
-
-// This page now supports both static generation and dynamic rendering
+// This page is fully dynamic - no static generation
+// All edit product pages are fetched at runtime
 export default async function EditProductPage({ 
   params 
 }: { 
@@ -24,7 +12,7 @@ export default async function EditProductPage({
   const { id } = await params;
   
   try {
-    // Server-side data fetching
+    // Server-side data fetching at runtime
     const product = await getProductById(id);
     
     if (!product) {

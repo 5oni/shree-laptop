@@ -1,21 +1,9 @@
-import { getProductById, getProducts } from '@/lib/services/supabaseService';
+import { getProductById } from '@/lib/services/supabaseService';
 import ProductDetailClient from './ProductDetailClient';
 import { notFound } from 'next/navigation';
 
-// Generate static params for existing products (optional for SEO)
-export async function generateStaticParams() {
-  try {
-    const products = await getProducts();
-    return products.map((product) => ({
-      id: product.id,
-    }));
-  } catch (error) {
-    console.error('Error generating static params:', error);
-    return [];
-  }
-}
-
-// This page now supports both static generation and dynamic rendering
+// This page is fully dynamic - no static generation
+// All products are fetched at runtime, allowing real-time updates
 export default async function ProductDetailPage({ 
   params 
 }: { 
@@ -24,7 +12,7 @@ export default async function ProductDetailPage({
   const { id } = await params;
   
   try {
-    // Server-side data fetching
+    // Server-side data fetching at runtime
     const product = await getProductById(id);
     
     if (!product) {
