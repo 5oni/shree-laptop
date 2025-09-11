@@ -1,9 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  // Vercel optimized configuration
   trailingSlash: true,
   images: {
-    unoptimized: true,
+    // Vercel handles image optimization automatically
+    domains: ['your-supabase-project.supabase.co'],
   },
   eslint: {
     ignoreDuringBuilds: false,
@@ -11,9 +12,6 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
-  // Skip dynamic routes during static export
-  skipTrailingSlashRedirect: true,
-  skipMiddlewareUrlNormalize: true,
 }
 
 module.exports = nextConfig

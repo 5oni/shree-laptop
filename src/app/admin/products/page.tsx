@@ -104,8 +104,12 @@ export default function ProductsPage() {
   // Handle image error
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     const imgElement = e.currentTarget;
+    console.warn('Image failed to load:', imgElement.src);
+    
+    // Hide the broken image
     imgElement.style.display = 'none';
     
+    // Show fallback content
     const parentElement = imgElement.parentElement;
     if (parentElement) {
       parentElement.innerHTML = '<div class="h-12 w-12 flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded"><span class="text-xs text-gray-500 dark:text-gray-400">No Image</span></div>';
@@ -193,9 +197,16 @@ export default function ProductsPage() {
                         <div className="h-12 w-12 relative">
                           {(() => {
                             const allImages = product.images && product.images.length > 0 ? product.images : (product.image ? [product.image] : []);
-                            const displayImage = allImages[0];
+                            // Filter out blob URLs and invalid URLs
+                            const validImages = allImages.filter(img => 
+                              img && 
+                              img.trim() !== '' && 
+                              img.startsWith('http') && 
+                              !img.startsWith('blob:')
+                            );
+                            const displayImage = validImages[0];
                             
-                            return displayImage && displayImage.trim() !== '' ? (
+                            return displayImage ? (
                               <div className="relative">
                                 <img
                                   src={displayImage}
@@ -203,9 +214,9 @@ export default function ProductsPage() {
                                   className="h-12 w-12 object-contain rounded bg-gray-100 dark:bg-gray-700"
                                   onError={handleImageError}
                                 />
-                                {allImages.length > 1 && (
+                                {validImages.length > 1 && (
                                   <div className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                                    {allImages.length}
+                                    {validImages.length}
                                   </div>
                                 )}
                               </div>
@@ -285,9 +296,16 @@ export default function ProductsPage() {
                       <div className="h-16 w-16 relative">
                         {(() => {
                           const allImages = product.images && product.images.length > 0 ? product.images : (product.image ? [product.image] : []);
-                          const displayImage = allImages[0];
+                          // Filter out blob URLs and invalid URLs
+                          const validImages = allImages.filter(img => 
+                            img && 
+                            img.trim() !== '' && 
+                            img.startsWith('http') && 
+                            !img.startsWith('blob:')
+                          );
+                          const displayImage = validImages[0];
                           
-                          return displayImage && displayImage.trim() !== '' ? (
+                          return displayImage ? (
                             <div className="relative">
                               <img
                                 src={displayImage}
@@ -295,9 +313,9 @@ export default function ProductsPage() {
                                 className="h-16 w-16 object-contain rounded bg-gray-100 dark:bg-gray-700"
                                 onError={handleImageError}
                               />
-                              {allImages.length > 1 && (
+                              {validImages.length > 1 && (
                                 <div className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                                  {allImages.length}
+                                  {validImages.length}
                                 </div>
                               )}
                             </div>

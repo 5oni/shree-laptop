@@ -1,7 +1,8 @@
-import { getProducts } from '@/lib/services/supabaseService';
+import { getProductById, getProducts } from '@/lib/services/supabaseService';
 import AdminProductDetailClient from './AdminProductDetailClient';
+import { notFound } from 'next/navigation';
 
-// Generate static params for static export
+// Generate static params for existing products (optional for SEO)
 export async function generateStaticParams() {
   try {
     const products = await getProducts();
@@ -14,7 +15,25 @@ export async function generateStaticParams() {
   }
 }
 
-export default async function AdminProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
+// This page now supports both static generation and dynamic rendering
+export default async function AdminProductDetailPage({ 
+  params 
+}: { 
+  params: Promise<{ id: string }> 
+}) {
   const { id } = await params;
-  return <AdminProductDetailClient productId={id} />;
+  
+  try {
+    // Server-side data fetching
+    const product = await getProductById(id);
+    
+    if (!product) {
+      notFound();
+    }
+    
+    return <AdminProductDetailClient productId={id} />;
+  } catch (error) {
+    console.error('Error fetching product:', error);
+    notFound();
+  }
 }

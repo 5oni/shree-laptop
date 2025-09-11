@@ -1,27 +1,39 @@
+import { getProductById, getProducts } from '@/lib/services/supabaseService';
 import EditProductClient from './EditProductClient';
+import { notFound } from 'next/navigation';
 
-// Generate static params for static export
+// Generate static params for existing products (optional for SEO)
 export async function generateStaticParams() {
-  // For static export, we need to provide at least one static param
-  // This will generate a placeholder page that handles dynamic behavior client-side
-  return [
-    { id: 'placeholder' }
-  ];
+  try {
+    const products = await getProducts();
+    return products.map((product) => ({
+      id: product.id,
+    }));
+  } catch (error) {
+    console.error('Error generating static params:', error);
+    return [];
+  }
 }
 
-interface EditProductPageProps {
-  params: Promise<{
-    id: string;
-  }>;
-}
-
-export default async function EditProductPage({ params }: EditProductPageProps) {
+// This page now supports both static generation and dynamic rendering
+export default async function EditProductPage({ 
+  params 
+}: { 
+  params: Promise<{ id: string }> 
+}) {
   const { id } = await params;
   
-  // For static export, if we get a placeholder ID, we'll handle it client-side
-  if (id === 'placeholder') {
-    return <EditProductClient productId="" />;
+  try {
+    // Server-side data fetching
+    const product = await getProductById(id);
+    
+    if (!product) {
+      notFound();
+    }
+    
+    return <EditProductClient productId={id} />;
+  } catch (error) {
+    console.error('Error fetching product:', error);
+    notFound();
   }
-  
-  return <EditProductClient productId={id} />;
 }

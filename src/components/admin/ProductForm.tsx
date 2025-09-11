@@ -113,6 +113,9 @@ export default function ProductForm({ product, onSubmit, isLoading }: ProductFor
       if (!imagePreview) {
         setImagePreview(newPreviewUrls[0]);
       }
+      
+      // Clear the input to allow selecting the same files again if needed
+      e.target.value = '';
     } catch (error) {
       console.error('Error processing images:', error);
       setError('Error processing images. Please try again.');
@@ -168,7 +171,13 @@ export default function ProductForm({ product, onSubmit, isLoading }: ProductFor
     }
 
     try {
-      let allImages = [...imagePreviews];
+      let allImages: string[] = [];
+      
+      // Separate existing URLs (from database) from new blob URLs (from file selection)
+      const existingUrls = imagePreviews.filter(url => url.startsWith('http'));
+      
+      // Add existing URLs (these are already uploaded to Supabase)
+      allImages = [...existingUrls];
       
       // If there are new files selected, upload them first
       if (selectedFiles.length > 0) {
@@ -183,7 +192,10 @@ export default function ProductForm({ product, onSubmit, isLoading }: ProductFor
       }
       
       // Set primary image (first image or existing primary)
-      const primaryImage = imagePreview || allImages[0] || '';
+      // Make sure we use a valid URL (not a blob URL)
+      const primaryImage = imagePreview && imagePreview.startsWith('http') 
+        ? imagePreview 
+        : allImages[0] || '';
       
       // Create a product data object that matches the required type
           const productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt'> = {
@@ -228,13 +240,26 @@ export default function ProductForm({ product, onSubmit, isLoading }: ProductFor
     }
     
     // Remove corresponding file if it exists
-    if (index < selectedFiles.length) {
-      setSelectedFiles(prev => prev.filter((_, i) => i !== index));
-    }
+    // Note: selectedFiles array should match imagePreviews array
+    const newSelectedFiles = selectedFiles.filter((_, i) => i !== index);
+    setSelectedFiles(newSelectedFiles);
   };
 
   const setPrimaryImage = (index: number) => {
     setImagePreview(imagePreviews[index]);
+  };
+
+  const clearAllImages = () => {
+    // Clean up object URLs
+    imagePreviews.forEach(url => {
+      if (url && !url.startsWith('http')) {
+        URL.revokeObjectURL(url);
+      }
+    });
+    
+    setImagePreviews([]);
+    setSelectedFiles([]);
+    setImagePreview(null);
   };
 
   return (
@@ -533,9 +558,9 @@ export default function ProductForm({ product, onSubmit, isLoading }: ProductFor
             </div>
           )}
           
-          {/* File Input */}
-          {imagePreviews.length < 10 && (
-            <div className="flex items-center justify-center">
+          {/* File Input and Controls */}
+          <div className="flex items-center justify-center gap-2">
+            {imagePreviews.length < 10 && (
               <label className={`flex items-center justify-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm cursor-pointer focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
@@ -551,8 +576,22 @@ export default function ProductForm({ product, onSubmit, isLoading }: ProductFor
                   disabled={isUploading}
                 />
               </label>
-            </div>
-          )}
+            )}
+            
+            {imagePreviews.length > 0 && (
+              <button
+                type="button"
+                onClick={clearAllImages}
+                className="flex items-center justify-center px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded text-sm cursor-pointer focus:outline-none focus:ring-1 focus:ring-red-500 transition-colors"
+                disabled={isUploading}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                Clear All
+              </button>
+            )}
+          </div>
           
           <p className="text-xs text-gray-500 text-center">
             JPG/PNG, max 50MB each (auto-compressed to 2MB). Max 10 images.
